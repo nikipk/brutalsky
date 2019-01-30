@@ -1,0 +1,23 @@
+{
+  "name": "brutalsky",
+  "version": "1.0.0",
+  "description": "A multiplayer puzzle game with socket.io and WebGL",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/nikipk/brutalsky.git"
+  },
+  "author": "Lukas Wipf & Niklas van der Heide",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/nikipk/brutalsky/issues"
+  },
+  "homepage": "https://github.com/nikipk/brutalsky#readme",
+  "dependencies": {
+    "express": "^4.16.4",
+    "socket.io": "^2.2.0"
+  }
+}
