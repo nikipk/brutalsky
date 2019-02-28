@@ -3,11 +3,45 @@
   <head>
     <meta charset="utf-8" />
     <title>Brutalsky</title>
+    <link rel="stylesheet" href="style.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.dev.js"></script>
   </head>
   <body>
-    <h1>Brutalsky init</h1>
-    <input id="cookieButton" type="submit" value="COOKIES" />
-    <script src="/client.js"></script>
+    <div id="header">
+        Brutalsky
+    </div>
+    <div id="content">
+      <div id="lobbyElements">
+        <p id="playerName">Name: Player</p>
+        <p id="playerLobby">Lobby: </p>
+        <br/>
+        <table id="lobbyTable">
+          <thead>
+            Lobbies:
+          </thead>
+        </table>
+        <br/>
+        <input id="playerNameInput" type="value" value="Player" />
+        </br>
+        <input id="setName" type="submit" value="set Name" />
+        </br>
+        <p>LobbyName:</p>
+        <input id="lobbyNameInput" type="value" value="mainHub" />
+        <br/>
+        <input id="setLobby" type="submit" value="log in" />
+        <br/>
+      </div>
+      <div id="gameElements">
+        <canvas id="canvas"></canvas>
+        <br/>
+        <div id="cookieTest">
+          <input id="cookieButton" type="submit" value="COOKIES" />
+          <h2 id="cookieCounter">Number cookies in this lobby</h2>
+        </div>
+        <script src="/client.js"></script>
+      </div>
+    </div>
+    <div id="footer">
+      <h3>made by Lukas Wipf & Niklas van der Heide</h3>
+    </div>
   </body>
-</html>
