@@ -5,9 +5,10 @@ const Player = require("./utils/lobby/player.js");
 
 const app = express();
 app.use(express.static("public"));
-const ip = "192.168.106.36";
 
+const ip = "192.168.106.36";
 const port = 6969;
+
 const server = app.listen(port, ip);
 const io = socket(server);
 console.log("running on: http://" + ip + ":" + port);
