@@ -1,29 +1,26 @@
 const express = require("express");
 const socket = require("socket.io");
-const LobbyManager = require("./utils/player/lobbyManager.js");
-const LevelLoader = require("./utils/map/levelLoader.js");
-const Player = require("./utils/player/player.js");
+const LobbyManager = require("./utils/lobby/lobbyManager.js");
+const Player = require("./utils/lobby/player.js");
 
 const app = express();
 app.use(express.static("public"));
-const ip = "192.168.107.196";
+const ip = "192.168.106.36";
+
 const port = 6969;
 const server = app.listen(port, ip);
 const io = socket(server);
 console.log("running on: http://" + ip + ":" + port);
 
-let lobbySize = 2;
+let lobbySize = 10;
 let lobbyManager = new LobbyManager(lobbySize);
-let levelLoader = new LevelLoader();
-
-console.log(levelLoader);
 
 io.on("connection", socket => {
   console.log("New connection: ", socket.id);
   let player = new Player(socket.id, "Player", 200, 200);
   socket.emit("upd_playerData", player);
+  socket.emit("load_sprites", )
   updateLobbyList();
-  socket.emit("upd_level", levelLoader.levels[0]);
   socket.on("join", data => {
     let playerLobby = lobbyManager.getPlayerLobby(socket.id);
     if (lobbyManager.lobbyExists(data.lobbyName)) {
@@ -34,13 +31,9 @@ io.on("connection", socket => {
             socket.join(data.lobbyName);
             socket.emit("upd_lobby", data.lobbyName);
             lobbyManager.addPlayerToLobby(player, data.lobbyName);
-            socket.emit("upd_playerData", player);
+            //socket.emit("upd_playerData", player);
             updateLobbyList();
-            console.log("user: ", socket.id, "joined lobby:", data.lobbyName);
-            socket.emit(
-              "cookies",
-              lobbyManager.getPlayerLobby(socket.id).cookies
-            );
+            //console.log("user: ", socket.id, "joined lobby:", data.lobbyName);
           } else {
             socket.emit("alert", "You are already in this lobby!");
           }
@@ -52,42 +45,41 @@ io.on("connection", socket => {
           socket.join(data.lobbyName);
           socket.emit("upd_lobby", data.lobbyName);
           lobbyManager.addPlayerToLobby(player, data.lobbyName);
-          socket.emit("upd_playerData", player);
+          //socket.emit("upd_playerData", player);
           updateLobbyList();
-          console.log("user: ", socket.id, "joined lobby:", data.lobbyName);
-          socket.emit(
-            "cookies",
-            lobbyManager.getPlayerLobby(socket.id).cookies
-          );
+          //console.log("user: ", socket.id, "joined lobby:", data.lobbyName);
         } else {
           socket.emit("alert", "This lobby is already full!");
         }
       }
     } else {
       if (playerLobby) {
-        console.log(lobbyManager.lobbies);
+        //console.log(lobbyManager.lobbies);
         lobbyManager.removePlayer(socket.id);
         updateLobbyList();
-        console.log(lobbyManager.lobbies);
+        //console.log(lobbyManager.lobbies);
       }
       lobbyManager.createNewLobby(data.lobbyName);
       socket.join(data.lobbyName);
       socket.emit("upd_lobby", data.lobbyName);
       lobbyManager.addPlayerToLobby(player, data.lobbyName);
-      socket.emit("upd_playerData", player);
+      //socket.emit("upd_playerData", player);
       updateLobbyList();
-      console.log("user:", socket.id, "joined lobby:", data.lobbyName);
-      socket.emit("cookies", lobbyManager.getPlayerLobby(socket.id).cookies);
+      //console.log("user:", socket.id, "joined lobby:", data.lobbyName);
     }
-    console.log(lobbyManager.lobbies[0]);
+    //console.log(lobbyManager.lobbies[0]);
   });
-  socket.on("cookies", () => {
+  socket.on("update_position", data => {
     let playerLobby = lobbyManager.getPlayerLobby(socket.id);
-    if (playerLobby) {
-      playerLobby.cookies++;
-      io.to(playerLobby.name).emit("cookies", playerLobby.cookies);
-    } else {
-      socket.emit("alert", "You have to join a lobby to collect COOKIES!");
+    if(playerLobby){
+      lobbyManager.getPlayerLobby(socket.id).updatePlayerWithID(socket.id, data.x, data.y);
+      console.log(lobbyManager.getPlayerLobby(socket.id).players);
+      io.to(playerLobby.name).emit("updatePlayers", lobbyManager.getPlayerLobby(socket.id).players);
+    }
+  });
+  socket.on("update_name", data => {
+    if(lobbyManager.getPlayerLobby(socket.id)){
+      lobbyManager.getPlayerLobby(socket.id).updatePlayerNameWithID(socket.id, data);
     }
   });
   socket.on("disconnect", () => {
@@ -95,7 +87,7 @@ io.on("connection", socket => {
     lobbyManager.removePlayer(socket.id);
     socket.disconnect();
     updateLobbyList();
-    console.log(lobbyManager.lobbies);
+    //console.log(lobbyManager.lobbies);
   });
 });
 

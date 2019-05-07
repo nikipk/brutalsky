@@ -1,28 +1,19 @@
-@font-face {
-  font-family: brutalsky;
-  src: url(BNMachine.ttf);
+html{
+  height: 100%;
 }
-#header {
-  width: 100%;
-  height: 200px;
-  text-align: center;
-  font-family: brutalsky, "Arial Black", "sans serif";
-  font-size: 120px;
-}
-#content {
-  width: 100%;
-  height: 800px;
+body { 
+  margin: 0px;
+  height:100%;
+  overflow: hidden;
 }
 #lobbyElements {
+  padding: 5px;
   width: 200px;
+  height: 400px;
   float: left;
 }
 #gameElements {
-  width: 100% - 200px;
+  width: calc(100% - 210px);
+  height: 100%;
   float: left;
-}
-#footer {
-  width: 100%;
-  height: 100px;
-  text-align: center;
 }

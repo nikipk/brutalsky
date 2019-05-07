@@ -3,46 +3,62 @@
   <head>
     <meta charset="utf-8" />
     <title>Brutalsky</title>
+    <link rel="icon" type="image/png" href="http://s3.amazonaws.com/submitsongs.musicxray.com/song_images/arts/1025828/large/letter-b-monogram-md20130806-28705-mib6d4-0.png?1375789580" />
     <link rel="stylesheet" href="style.css" />
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.dev.js"></script>
+    <script src="game/game.js"></script>
+    <script src="game/material.js"></script>
+    <script src="game/maths.js"></script>
+
+    <script type="vertex_shader" id="vs_01">
+      attribute vec2 a_position;
+      attribute vec2 a_texCoord;
+
+      uniform mat3 u_world;
+      uniform mat3 u_object;
+      uniform vec2 u_frame;
+
+      varying vec2 v_texCoord;
+      void main(){
+          gl_Position = vec4(u_world * u_object * vec3(a_position, 1), 1);
+          v_texCoord = a_texCoord + u_frame;
+      }
+    </script>
+
+    <script type="fragment_shader" id="fs_01">
+      precision mediump float;
+
+      uniform sampler2D u_image;
+      uniform vec4 u_color;
+      varying vec2 v_texCoord;
+
+      void main() {
+          gl_FragColor = u_color * texture2D(u_image, v_texCoord);
+      }
+    </script>
+
   </head>
   <body>
-    <div id="header">
-        Brutalsky
+    <div id="lobbyElements">
+      <p id="playerName">Name: Player</p>
+      <p id="playerLobby">Lobby: </p>
+      <br/>
+      <table id="lobbyTable">
+        <thead>
+          Lobbies:
+        </thead>
+      </table>
+      <br/>
+      <input id="playerNameInput" type="value" value="Player" />
+      </br>
+      <input id="setName" type="submit" value="set Name" />
+      </br>
+      <p>LobbyName:</p>
+      <input id="lobbyNameInput" type="value" value="mainHub" />
+      <br/>
+      <input id="setLobby" type="submit" value="log in" />
+      <br/>
     </div>
-    <div id="content">
-      <div id="lobbyElements">
-        <p id="playerName">Name: Player</p>
-        <p id="playerLobby">Lobby: </p>
-        <br/>
-        <table id="lobbyTable">
-          <thead>
-            Lobbies:
-          </thead>
-        </table>
-        <br/>
-        <input id="playerNameInput" type="value" value="Player" />
-        </br>
-        <input id="setName" type="submit" value="set Name" />
-        </br>
-        <p>LobbyName:</p>
-        <input id="lobbyNameInput" type="value" value="mainHub" />
-        <br/>
-        <input id="setLobby" type="submit" value="log in" />
-        <br/>
-      </div>
-      <div id="gameElements">
-        <canvas id="webGL"></canvas>
-        <br/>
-        <div id="cookieTest">
-          <input id="cookieButton" type="submit" value="COOKIES" />
-          <h2 id="cookieCounter">Number cookies in this lobby</h2>
-        </div>
-        <script src="/client.js"></script>
-        <script src="game/game.js"></script>
-      </div>
-    </div>
-    <div id="footer">
-      <h3>made by Lukas Wipf & Niklas van der Heide</h3>
-    </div>
+    <div id="gameElements"></div>
   </body>
+</html>

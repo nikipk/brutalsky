@@ -2,7 +2,22 @@ class Lobby {
   constructor(name) {
     this.name = name;
     this.players = [];
-    this.cookies = 0;
+  }
+  updatePlayerNameWithID(playerID, newName){
+    this.players.forEach(player => {
+      if (player.ID == playerID) {
+        player.name = newName;
+      }
+    });
+  }
+  updatePlayerWithID(playerID, newX, newY){
+    this.players.forEach(player => {
+      if (player.ID == playerID) {
+        player.position.x = newX;
+        player.position.y = newY;
+      }
+    });
+    console.log(this.players);
   }
   containsPlayer(playerID) {
     let found = false;
